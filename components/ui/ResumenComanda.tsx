@@ -44,15 +44,6 @@ export function ResumenComanda() {
     startTransition(async () => {
       const result = await generarComandaPDF(items, comentario)
       if (result.ok) {
-        const bytes = Uint8Array.from(atob(result.base64), (c) => c.charCodeAt(0))
-        const blob = new Blob([bytes], { type: 'application/pdf' })
-        const url = URL.createObjectURL(blob)
-        const a = document.createElement('a')
-        a.href = url
-        a.download = result.filename
-        a.click()
-        URL.revokeObjectURL(url)
-
         setResultMsg(result.filename)
         setStatus('sent')
         setTimeout(() => {
@@ -107,7 +98,7 @@ export function ResumenComanda() {
             {status === 'sent' && (
               <div className="flex items-center gap-2 px-4 py-3 bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400 text-sm">
                 <CheckCircle2 className="w-4 h-4 shrink-0" />
-                <span className="truncate">PDF descargado: {resultMsg}</span>
+                <span className="truncate">PDF guardado: {resultMsg}</span>
               </div>
             )}
             {status === 'error' && (
