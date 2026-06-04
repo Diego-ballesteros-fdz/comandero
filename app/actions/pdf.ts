@@ -1,12 +1,10 @@
 'use server'
 
 import { PDFDocument, StandardFonts, rgb, type PDFFont } from 'pdf-lib'
-import { promises as fs } from 'fs'
-import path from 'path'
 import type { ItemComanda } from '@/types/comanda'
 
 export type PdfResult =
-  | { ok: true; filename: string }
+  | { ok: true; base64: string; filename: string }
   | { ok: false; error: string }
 
 // ─── Page / column constants (80 mm thermal receipt) ────────────────────────
@@ -211,14 +209,11 @@ export async function generarComandaPDF(
     const hasPlatos = items.some((i) => i.kind === 'plato')
     if (!hasPlatos) return { ok: false, error: 'La comanda no tiene platos.' }
 
-    const comandasDir = path.join(process.cwd(), 'comandas')
-    await fs.mkdir(comandasDir, { recursive: true })
-
     const pdfBytes = await buildPDF(items, comentario)
+    const base64 = Buffer.from(pdfBytes).toString('base64')
     const filename = `comanda-${Date.now()}.pdf`
-    await fs.writeFile(path.join(comandasDir, filename), pdfBytes)
 
-    return { ok: true, filename }
+    return { ok: true, base64, filename }
   } catch (err) {
     return { ok: false, error: err instanceof Error ? err.message : String(err) }
   }
