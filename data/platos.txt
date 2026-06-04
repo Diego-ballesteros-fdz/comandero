@@ -1,0 +1,6 @@
+1|Ensalada César|8.5|true
+2|Pasta Carbonara|12|true
+3|Chuletón de ternera|22.5|true
+4|Tarta de queso|5.5|true
+5|Agua mineral|1.5|true
+6|Albondigas|10.5|true
